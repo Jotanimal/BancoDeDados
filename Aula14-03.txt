@@ -1,0 +1,93 @@
+# AULA DE BANCO DE DADOS 
+# DIA 14/03/2024
+
+CREATE DATABASE propriedade;
+
+USE propriedade;
+
+CREATE TABLE cliente(
+	cod INT AUTO_INCREMENT,
+	nome VARCHAR(5) NULL,
+	sexo CHAR(1) NOT NULL,
+	nascimento DATE,
+	renda DECIMAL(6,2),
+	PRIMARY KEY(cod)
+);
+
+CREATE TABLE veiculo(
+	id INT,
+    marca CHAR(1),
+    modelo VARCHAR(10),
+    ano SMALLINT
+    );
+    
+-- CORRIGINDO A TABELA VEICULO
+
+ALTER TABLE veiculo ADD PRIMARY KEY(id);
+DESCRIBE veiculo;
+
+ALTER TABLE veiculo MODIFY marca VARCHAR(15);
+DESCRIBE veiculo;
+
+ALTER TABLE cliente ADD CHECK (sexo IN ('f', 'm'));
+
+ALTER TABLE veiculo ADD cod_cli INT;
+ALTER TABLE veiculo ADD CONSTRAINT fk_cli_vei
+FOREIGN KEY (cod_cli) REFERENCES cliente(cod);
+
+DESCRIBE veiculo;
+
+-- INSERIR DADOS EM TABELAS; USE: INSERT
+-- INSERT INTO nome_tabela(colunas) VALUES (dados)
+
+INSERT INTO cliente (cod, nome, sexo, nascimento, renda)
+VALUES (1, 'Maria', 'f', '1997-12-21', 8500.00);
+
+INSERT INTO cliente (nome, sexo, nascimento, renda)
+VALUES ('João', 'm', '1972-06-12', 1050.00);
+
+SELECT * from cliente;
+
+INSERT INTO cliente (renda, sexo, cod, nascimento, nome)
+VALUES (2100.00, 'f', 103, '2000-06-05', 'Ana');
+
+INSERT INTO cliente (sexo)
+VALUES ('m');
+
+INSERT INTO cliente (nome, sexo)
+VALUES ('Joana', 'f');
+
+SELECT * FROM cliente;
+
+DELETE FROM veiculo WHERE id=102;
+
+SELECT * FROM veiculo;
+
+INSERT INTO veiculo (id, marca, modelo, ano)
+VALUES (102, 'Ford', 'KA', 2001), (103, 'Volkswagen', 'Fusca', 1977);
+
+INSERT INTO veiculo VALUES (104, 'Toyota', 'Corolla', 2020, 103), (105, 'Honda', 'HRV', 2023, 103);
+
+-- ATUALIZAR DADOS DAS TABELAS: UPDATE
+
+SELECT * FROM cliente;
+
+UPDATE cliente SET sexo = 'f' WHERE cod = 105;
+
+UPDATE cliente SET nome = 'Pedro';
+
+-- DESATIVANDO O MODO DE SEGURANÇA
+
+set sql_safe_updates = 0;
+
+-- APAGAR DADOS NAS TABELAS: DELETE
+
+DELETE FROM cliente WHERE cod = 103; -- ITEM JÁ REFERENCIADO EM 'veiculo'
+
+DELETE FROM cliente WHERE cod = 104;
+
+SELECT * FROM cliente;
+
+-- HABILITANDO MODO SEGURANÇA
+
+SET sql_safe_updates = 1;
