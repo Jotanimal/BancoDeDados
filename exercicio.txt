@@ -1,0 +1,58 @@
+CREATE DATABASE sistema_bancario;
+
+USE sistema_bancario;
+
+CREATE TABLE Banco (
+	codigo INT NOT NULL,
+    nome VARCHAR(22) NOT NULL,
+    PRIMARY KEY (codigo)
+);
+
+CREATE TABLE Agencia (
+	cod_banco INT NOT NULL,
+    numero_agencia INT NOT NULL,
+    endereco VARCHAR(70),
+    FOREIGN KEY (cod_banco) REFERENCES Banco(codigo),
+    PRIMARY KEY (numero_agencia)
+);
+
+CREATE TABLE Cliente (
+	cpf CHAR(11) NOT NULL,
+    nome VARCHAR(22) NOT NULL,
+    sexo CHAR(1) NOT NULL,
+    endereco VARCHAR(70) NOT NULL,
+    PRIMARY KEY (cpf)
+);
+
+CREATE TABLE Conta (
+	numero_conta INT NOT NULL,
+    saldo DOUBLE NOT NULL,
+    tipo_conta CHAR(1),
+    num_agencia INT NOT NULL,
+    PRIMARY KEY (numero_conta),
+    FOREIGN KEY (num_agencia) REFERENCES Agencia(numero_agencia)
+);
+
+CREATE TABLE Historico (
+	cpf_cliente CHAR(11) NOT NULL,
+    num_conta INT NOT NULL,
+    data_inicio DATE NOT NULL,
+    PRIMARY KEY (cpf_cliente, num_conta),
+    FOREIGN KEY (cpf_cliente) REFERENCES Cliente(cpf),
+    FOREIGN KEY (num_conta) REFERENCES Conta(numero_conta)
+);
+
+CREATE TABLE Telefone_Cliente (
+	cpf_cli CHAR(11) NOT NULL,
+    telefone CHAR(15) NOT NULL,
+    PRIMARY KEY (cpf_cli, telefone),
+    FOREIGN KEY (cpf_cli) REFERENCES Cliente(cpf)
+);
+
+INSERT INTO Banco(codigo, nome)
+VALUES (1, 'Banco do Brasil'), (4, 'CEF');
+
+INSERT INTO Agencia(numero_agencia, endereco, cod_banco)
+VALUES (322, 'Av. Walfredo Macedo Brandão, 1139', 4), (1253, 'R. Bancário Sérgio Guerra, 17', 1);
+    
+SELECT * FROM Agencia;
